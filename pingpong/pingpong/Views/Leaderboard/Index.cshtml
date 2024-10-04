@@ -1,0 +1,58 @@
+@model IEnumerable<pingpong.Models.Player>
+
+@{
+    ViewData["Title"] = "Leaderboard";
+
+    // Define a list of rainbow colors
+    var rainbowColors = new List<string>
+    { 
+        "#FF0000", // Red
+        "#FF7F00", // Orange
+        "#FFFF00", // Yellow
+        "#00FF00", // Green
+        "#0000FF", // Blue
+        "#4B0082", // Indigo
+        "#9400D3"  // Violet
+    };
+}
+
+<h1>Leaderboard</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Rank</th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.First().Score)
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Select((player, index) => new { player, index = index + 1 })) 
+    {
+        // Get the color based on the index
+        var color = rainbowColors[(item.index - 1) % rainbowColors.Count];
+        var textColor = (color == "#FFFF00" || color == "#00FF00") ? "black" : "white"; // Set text color for yellow and green backgrounds
+
+        <tr style="background-color:@color; color: @textColor; border-radius: 10px;">
+            <td>@item.index</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.player.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.player.Score)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<style>
+    .table tr {
+        border-radius: 10px; /* Rounded corners for table rows */
+        overflow: hidden; /* Ensure the background color fills the rounded corners */
+    }
+</style>

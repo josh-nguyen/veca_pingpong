@@ -1,0 +1,26 @@
+@model IEnumerable<pingpong.Models.Player>
+
+<h1>Select Players for Games</h1>
+
+<form asp-action="GenerateGames" method="post">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Select</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" name="selectedPlayers" value="@player.Id" />
+                </td>
+                <td>@Html.DisplayFor(m => player.Name)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+</form>

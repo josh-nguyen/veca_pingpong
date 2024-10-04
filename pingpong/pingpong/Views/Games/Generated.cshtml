@@ -1,0 +1,23 @@
+@model List<List<(pingpong.Models.Player PlayerA, pingpong.Models.Player PlayerB)>>
+
+<h1>Generated Games</h1>
+
+@if (Model == null || !Model.Any())
+{
+<p>No games generated. Please select players to generate games.</p>
+}
+else
+{
+int roundNumber = 1;
+foreach (var round in Model)
+{
+<h3>Round @roundNumber</h3>
+foreach (var matchup in round)
+{
+<p>@matchup.PlayerA.Name + @matchup.PlayerB.Name</p> <!-- Display player names -->
+}
+roundNumber++;
+}
+}
+
+<a asp-action="SelectPlayers" class="btn btn-primary">Back to Player Selection</a>

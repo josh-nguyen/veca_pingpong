@@ -1,0 +1,21 @@
+@model List<pingpong.Models.Player> 
+
+@{
+    ViewData["Title"] = "Select Players";
+}
+
+<h2>Select Players</h2>
+
+<form asp-action="GenerateGames" method="post">
+    <div>
+        @foreach (var player in Model)
+        {
+            <div>
+                <input type="checkbox" name="selectedPlayers" value="@player.Id" />
+                @player.Name 
+            </div>
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+    
+</form>

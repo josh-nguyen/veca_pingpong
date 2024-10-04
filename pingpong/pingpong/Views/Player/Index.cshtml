@@ -1,0 +1,60 @@
+@model IEnumerable<pingpong.Models.Player>
+
+@{
+    ViewData["Title"] = "Table";
+
+    // Define a list of rainbow colors
+    var rainbowColors = new List<string>
+    {
+        "#FF0000", // Red
+        "#FF7F00", // Orange
+        "#FFFF00", // Yellow
+        "#00FF00", // Green
+        "#0000FF", // Blue
+        "#4B0082", // Indigo
+        "#9400D3"  // Violet
+    };
+}
+
+<h1>Table</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Player</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Score)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderBy(p => p.Id)) // Ensure fixed ordering by Id
+        {
+            var index = item.Id; // Use Id or another stable property for fixed order
+            var color = rainbowColors[(index - 1) % rainbowColors.Count];
+            var textColor = (color == "#FFFF00" || color == "#00FF00") ? "black" : "white"; // Set text color for yellow and green backgrounds
+
+            <tr style="background-color:@color; color: @textColor; border-radius: 10px;">
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Score)</td>
+                <td>
+                    <form asp-action="UpdateScore" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button type="submit" name="increment" value="true" class="btn btn-success">+</button>
+                        <button type="submit" name="increment" value="false" class="btn btn-danger">-</button>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .table tr {
+        border-radius: 10px; /* Rounded corners for table rows */
+        overflow: hidden; /* Ensure the background color fills the rounded corners */
+    }
+</style>
