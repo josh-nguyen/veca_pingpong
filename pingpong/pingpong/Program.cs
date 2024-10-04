@@ -8,11 +8,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// var connection = String.Empty;
+var connection = "Server=tcp:vecapingpong.database.windows.net,1433;Initial Catalog=vecapingpong;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";";
 
-// Register PlayerService
-// builder.Services.AddScoped<PlayerService>();
+// if (builder.Environment.IsDevelopment())
+// {
+//     builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+//     connection = builder.Configuration.GetConnectionString("DefaultConnection");
+// }
+// else
+// {
+//     connection = Environment.GetEnvironmentVariable("DefaultConnection");
+// }
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connection));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -277,3 +277,4 @@
 /Users/joshnguyen/Desktop/veca_pingpong/pingpong/pingpong/obj/Release/net8.0/pingpong.pdb
 /Users/joshnguyen/Desktop/veca_pingpong/pingpong/pingpong/obj/Release/net8.0/pingpong.genruntimeconfig.cache
 /Users/joshnguyen/Desktop/veca_pingpong/pingpong/pingpong/obj/Release/net8.0/ref/pingpong.dll
+/Users/joshnguyen/Desktop/veca_pingpong/pingpong/pingpong/obj/Release/net8.0/pingpong.sourcelink.json
