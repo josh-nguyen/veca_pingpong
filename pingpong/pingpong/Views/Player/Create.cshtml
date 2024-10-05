@@ -1,35 +1,63 @@
 @model pingpong.Models.Player
 
 @{
-    ViewData["Title"] = "Create";
+ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="text-center my-4">Create Player</h1>
 
-<h4>Player</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" class="p-4 border border-secondary rounded shadow">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <h4 class="text-center">Player Details</h4>
+                <hr />
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter Player Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Score" class="control-label"></label>
+                    <input asp-for="Score" class="form-control" placeholder="Enter Player Score" />
+                    <span asp-validation-for="Score" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center">
+                    <input type="submit" value="Create" class="btn btn-primary btn-lg" style="margin-top: 15px;" /> <!-- Added margin-top -->
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <a asp-action="Index" class="btn btn-secondary btn-lg">Back</a>
             </div>
-            <div class="form-group">
-                <label asp-for="Score" class="control-label"></label>
-                <input asp-for="Score" class="form-control" />
-                <span asp-validation-for="Score" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    /* Custom styles for the form */
+    .container {
+        margin-top: 30px; /* Spacing from top */
+    }
 
+    .form-control {
+        border-radius: 20px; /* Rounded corners for inputs */
+    }
+
+    .btn {
+        border-radius: 20px; /* Rounded corners for buttons */
+    }
+
+    .border {
+        border-width: 2px !important; /* Thicker border for form */
+    }
+
+    h4 {
+        color: #007BFF; /* Bootstrap primary color */
+    }
+</style>

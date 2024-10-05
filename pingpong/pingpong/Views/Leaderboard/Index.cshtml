@@ -10,49 +10,98 @@
         "#FF7F00", // Orange
         "#FFFF00", // Yellow
         "#00FF00", // Green
-        "#0000FF", // Blue
+        "#00FFFF",  // Cyan
         "#4B0082", // Indigo
-        "#9400D3"  // Violet
+        "#9400D3",  // Violet
+        "#FF00FF",  // Magenta
+
     };
 }
 
-<h1>Leaderboard</h1>
+<h1 class="text-center my-4">Leaderboard</h1>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Rank</th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.First().Score)
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.Select((player, index) => new { player, index = index + 1 })) 
-    {
-        // Get the color based on the index
-        var color = rainbowColors[(item.index - 1) % rainbowColors.Count];
-        var textColor = (color == "#FFFF00" || color == "#00FF00") ? "black" : "white"; // Set text color for yellow and green backgrounds
+<div class="container">
+    <table class="table table-striped table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.First().Name)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.First().Score)</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Select((player, index) => new { player, index = index + 1 })) 
+        {
+            // Get the color based on the index
+            var color = rainbowColors[(item.index - 1) % rainbowColors.Count];
+            var textColor = (color == "#FFFF00" || color == "#00FF00") ? "black" : "white"; // Set text color for yellow and green backgrounds
 
-        <tr style="background-color:@color; color: @textColor; border-radius: 10px;">
-            <td>@item.index</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.player.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.player.Score)
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+            <tr>
+                <td>
+                    <div style="background-color:@color; color:@textColor; border-radius: 15px; padding: 10px 15px; display: inline-block; margin: 5px;">
+                        @item.index
+                    </div>
+                </td>
+                <td>
+                    <div style="background-color:@color; color:@textColor; border-radius: 15px; padding: 10px 15px; display: inline-block; margin: 5px;">
+                        @Html.DisplayFor(modelItem => item.player.Name)
+                    </div>
+                </td>
+                <td>
+                    <div style="background-color:@color; color:@textColor; border-radius: 15px; padding: 10px 15px; display: inline-block; margin: 5px;">
+                        @Html.DisplayFor(modelItem => item.player.Score)
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
 
 <style>
-    .table tr {
-        border-radius: 10px; /* Rounded corners for table rows */
+    /* Add some custom styles */
+    body {
+        background-color: #f8f9fa; /* Light background for contrast */
+        font-family: 'Arial', sans-serif; /* Change font */
+    }
+
+    .container {
+        margin-top: 20px; /* Space above the container */
+        padding: 20px; /* Padding for inner spacing */
+        border-radius: 10px; /* Rounded corners for container */
+        background-color: #fff; /* White background for the container */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+    .table {
+        border-radius: 10px; /* Rounded corners for the table */
         overflow: hidden; /* Ensure the background color fills the rounded corners */
+    }
+
+    .table thead th {
+        border-bottom: none; /* Remove bottom border */
+        font-size: 1.1rem; /* Slightly larger font size for header */
+        padding: 10px; /* Increased padding for headers */
+    }
+
+    .table tr {
+        transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+    }
+
+    .table tr:hover {
+        filter: brightness(95%); /* Slightly darken row on hover */
+    }
+
+    .table td {
+        font-size: 1rem; /* Increased font size for table cells */
+        padding: 10px; /* Increased padding */
+    }
+
+    /* Adjust the margins for the colored divs */
+    .colored-div {
+        border-radius: 15px;
+        padding: 10px 15px; /* Increased padding for colored divs */
+        display: inline-block;
+        margin: 5px; /* Slightly larger margin */
     }
 </style>

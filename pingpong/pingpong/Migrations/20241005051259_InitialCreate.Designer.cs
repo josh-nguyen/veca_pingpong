@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pingpong.Data;
 
@@ -11,9 +12,11 @@ using pingpong.Data;
 namespace pingpong.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241005051259_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,33 +77,6 @@ namespace pingpong.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("pingpong.Models.ScoreHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("ChangeDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NewScore")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OldScore")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("ScoreHistories");
-                });
-
             modelBuilder.Entity("pingpong.Models.Game", b =>
                 {
                     b.HasOne("pingpong.Models.Player", "PlayerA")
@@ -118,17 +94,6 @@ namespace pingpong.Migrations
                     b.Navigation("PlayerA");
 
                     b.Navigation("PlayerB");
-                });
-
-            modelBuilder.Entity("pingpong.Models.ScoreHistory", b =>
-                {
-                    b.HasOne("pingpong.Models.Player", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Player");
                 });
 #pragma warning restore 612, 618
         }

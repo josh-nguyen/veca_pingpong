@@ -1,60 +1,136 @@
 @model IEnumerable<pingpong.Models.Player>
 
 @{
-    ViewData["Title"] = "Table";
+ViewData["Title"] = "Table";
 
-    // Define a list of rainbow colors
-    var rainbowColors = new List<string>
-    {
-        "#FF0000", // Red
-        "#FF7F00", // Orange
-        "#FFFF00", // Yellow
-        "#00FF00", // Green
-        "#0000FF", // Blue
-        "#4B0082", // Indigo
-        "#9400D3"  // Violet
-    };
+// Define a list of rainbow colors
+var rainbowColors = new List<string>
+{
+"#FF0000", // Red
+"#FF7F00", // Orange
+"#FFFF00", // Yellow
+"#00FF00", // Green
+"#00FFFF",  // Cyan
+"#4B0082", // Indigo
+"#9400D3", // Violet
+"#FF00FF",  // Magenta
+
+};
 }
 
-<h1>Table</h1>
+<h1 class="text-center my-4">Table</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add Player</a>
+<p class="text-center">
+    <a asp-action="Create" class="btn btn-primary btn-lg">Add Player</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
-            <th>@Html.DisplayNameFor(model => model.First().Score)</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderBy(p => p.Id)) // Ensure fixed ordering by Id
-        {
-            var index = item.Id; // Use Id or another stable property for fixed order
+
+<div class="container">
+    <div class="table-responsive"> <!-- Make the table responsive -->
+        <table class="table table-hover table-striped table-sm">
+            <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Score)</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.OrderBy(p => p.Id)) // Ensure fixed ordering by Id
+            {
+            var index = item.Id;
             var color = rainbowColors[(index - 1) % rainbowColors.Count];
             var textColor = (color == "#FFFF00" || color == "#00FF00") ? "black" : "white"; // Set text color for yellow and green backgrounds
 
-            <tr style="background-color:@color; color: @textColor; border-radius: 10px;">
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Score)</td>
+            <tr>
                 <td>
-                    <form asp-action="UpdateScore" method="post">
+                    <div style="background-color:@color; color:@textColor;" class="colored-div">
+                        <a asp-action="Edit" asp-route-id="@item.Id" style="color: inherit; text-decoration: none;">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div style="background-color:@color; color:@textColor;" class="colored-div score-pill">
+                        @Html.DisplayFor(modelItem => item.Score)
+                    </div>
+                </td>
+                <td class="button-cell"> <!-- Added a class to this td -->
+                    <form asp-action="UpdateScore" method="post" class="d-flex justify-content-start"> <!-- Changed justify-content to start -->
                         <input type="hidden" name="id" value="@item.Id" />
-                        <button type="submit" name="increment" value="true" class="btn btn-success">+</button>
-                        <button type="submit" name="increment" value="false" class="btn btn-danger">-</button>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <button type="submit" name="champ" value="true" class="btn btn-info btn-lg mx-1">+3</button>
+                        <button type="submit" name="increment" value="true" class="btn btn-success btn-lg mx-1">+</button>
+                        <button type="submit" name="increment" value="false" class="btn btn-danger btn-lg mx-1">-</button>
                     </form>
                 </td>
             </tr>
-        }
-    </tbody>
-</table>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <style>
-    .table tr {
-        border-radius: 10px; /* Rounded corners for table rows */
+    /* Custom styles to enhance the table appearance */
+    body {
+        background-color: #f8f9fa; /* Light background for contrast */
+        font-family: 'Arial', sans-serif; /* Change font */
+    }
+
+    .container {
+        margin-top: 20px; /* Space above the container */
+        padding: 20px; /* Padding for inner spacing */
+        border-radius: 10px; /* Rounded corners for container */
+        background-color: #fff; /* White background for the container */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+    .table {
+        border-radius: 10px; /* Rounded corners for the table */
         overflow: hidden; /* Ensure the background color fills the rounded corners */
+    }
+
+    .table thead th {
+        border-bottom: none; /* Remove bottom border */
+        font-size: 1.1rem; /* Slightly larger font size for header */
+        padding: 10px; /* Increased padding for headers */
+    }
+
+    .table tr {
+        transition: background-color 0.3s ease; /* Smooth transition for hover effects */
+    }
+
+    .table tr:hover {
+        filter: brightness(95%); /* Slightly darken row on hover */
+    }
+
+    .table td {
+        font-size: 1rem; /* Increased font size for table cells */
+        padding: 10px; /* Increased padding */
+    }
+
+    /* Adjust the margins for the colored divs */
+    .colored-div {
+        border-radius: 15px;
+        padding: 10px; /* More padding to make it look like a pill */
+        display: flex; /* Use flex to center content */
+        align-items: center; /* Vertically center */
+        justify-content: center; /* Horizontally center */
+        margin: 5px; /* Slightly larger margin */
+    }
+
+    /* Specific styles for the score pill */
+    .score-pill {
+        height: 30px;
+        width: 45px;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Enable horizontal scrolling if needed */
+    }
+
+    /* New style for button alignment */
+    .button-cell {
+        text-align: left; /* Aligns the buttons to the left */
+        padding-left: 5px; /* Add some padding to the left for spacing */
     }
 </style>

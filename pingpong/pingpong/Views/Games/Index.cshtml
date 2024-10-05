@@ -1,27 +1,43 @@
-@model IEnumerable<pingpong.Models.Player>
+@model IEnumerable<pingpong.Models.Game>
 
-<h1>Select Players for Games</h1>
+<h1 class="text-center my-4">Generated Games</h1>
 
-<form asp-action="GenerateGames" method="post">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Select</th>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var player in Model)
-        {
-        <tr>
-            <td>
-                <input type="checkbox" name="selectedPlayers" value="@player.Id" />
-            </td>
-            <td>@Html.DisplayFor(m => player.Name)</td>
-            <td>@Html.DisplayFor(m => player.Score)</td>
-        </tr>
-        }
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-primary">Confirm</button>
-</form>
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning text-center" role="alert">
+        No games generated. Please select players to generate games.
+    </div>
+}
+else
+{
+    // Group games by round number
+    var groupedGames = Model.GroupBy(g => g.RoundNumber);
+
+    foreach (var group in groupedGames)
+    {
+        <div class="card my-3">
+            <div class="card-header">
+                <h3 class="mb-0">Round @group.Key</h3> <!-- Display round number -->
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var game in group)
+                    {
+                        var combinedScore = (game.PlayerA?.Score ?? 0) + (game.PlayerB?.Score ?? 0);
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>
+                                @(game.PlayerA?.Name ?? "Unknown Player A") & 
+                                @(game.PlayerB?.Name ?? "Unknown Player B")
+                            </span>
+                            <span class="badge bg-primary rounded-pill">Combined : @combinedScore</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+
+<div class="text-center mt-4">
+    <a asp-action="SelectPlayers" class="btn btn-primary">Generate New Games</a>
+</div>

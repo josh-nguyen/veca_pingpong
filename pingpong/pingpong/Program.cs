@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // var connection = String.Empty;
-var connection = "Server=tcp:vecapingpong.database.windows.net,1433;Initial Catalog=vecapingpong;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";";
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+// var connection = "Server=tcp:vecapingpong.database.windows.net,1433;Initial Catalog=vecapingpong;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";";
 
 // if (builder.Environment.IsDevelopment())
 // {

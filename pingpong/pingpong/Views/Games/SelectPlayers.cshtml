@@ -1,21 +1,39 @@
-@model List<pingpong.Models.Player> 
+@model IEnumerable<pingpong.Models.Player>
 
-@{
-    ViewData["Title"] = "Select Players";
-}
-
-<h2>Select Players</h2>
+<h1>Select Players for Games</h1>
 
 <form asp-action="GenerateGames" method="post">
-    <div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox" id="selectAll" /> <!-- Select All Checkbox -->
+            </th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
         @foreach (var player in Model)
         {
-            <div>
-                <input type="checkbox" name="selectedPlayers" value="@player.Id" />
-                @player.Name 
-            </div>
+        <tr>
+            <td>
+                <input type="checkbox" name="selectedPlayers" value="@player.Id" class="player-checkbox" />
+            </td>
+            <td>@Html.DisplayFor(m => player.Name)</td>
+        </tr>
         }
-    </div>
+        </tbody>
+    </table>
     <button type="submit" class="btn btn-primary">Confirm</button>
-    
 </form>
+
+@section Scripts {
+<script>
+    document.getElementById('selectAll').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.player-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked; // Set each checkbox to the state of the Select All checkbox
+        });
+    });
+</script>
+}

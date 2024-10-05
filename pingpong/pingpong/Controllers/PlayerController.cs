@@ -26,7 +26,6 @@ namespace pingpong.Controllers
             return View(players);
         }
 
-
         // GET: Player/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,12 +51,20 @@ namespace pingpong.Controllers
         }
 
         // POST: Player/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Score")] Player player)
         {
+            // Parameter checks
+            if (player.Name.Length > 14)
+            {
+                ModelState.AddModelError("Name", "Name cannot exceed 14 characters.");
+            }
+            if (player.Score > 150)
+            {
+                ModelState.AddModelError("Score", "Score cannot exceed 150.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(player);
@@ -86,8 +93,6 @@ namespace pingpong.Controllers
         }
 
         // POST: Player/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Score")] Player player)
@@ -95,6 +100,16 @@ namespace pingpong.Controllers
             if (id != player.Id)
             {
                 return NotFound();
+            }
+
+            // Parameter checks
+            if (player.Name.Length > 14)
+            {
+                ModelState.AddModelError("Name", "Name cannot exceed 14 characters.");
+            }
+            if (player.Score > 150)
+            {
+                ModelState.AddModelError("Score", "Score cannot exceed 150.");
             }
 
             if (ModelState.IsValid)
@@ -163,7 +178,7 @@ namespace pingpong.Controllers
         // POST: Player/UpdateScore/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateScore(int id, bool increment)
+        public async Task<IActionResult> UpdateScore(int id, bool increment, bool champ = false)
         {
             var player = await _context.Players.FindAsync(id);
             if (player == null)
@@ -171,8 +186,15 @@ namespace pingpong.Controllers
                 return NotFound();
             }
 
-            // Update the score based on whether we're incrementing or decrementing
-            if (increment)
+            // Store the old score before updating
+            var oldScore = player.Score;
+
+            // Update the score based on whether we're incrementing, decrementing, or adding Champ points
+            if (champ)
+            {
+                player.Score += 3; // Add 3 points for Champ
+            }
+            else if (increment)
             {
                 player.Score++;
             }
@@ -181,9 +203,32 @@ namespace pingpong.Controllers
                 player.Score--;
             }
 
+            // Validate score update
+            if (player.Score > 150)
+            {
+                ModelState.AddModelError("Score", "Score cannot exceed 150.");
+                // Optionally return to index or appropriate view
+                return RedirectToAction(nameof(Index)); // Or render a specific view
+            }
+
+            // Add the score change to the ScoreHistory
+            var scoreHistory = new ScoreHistory
+            {
+                Player = player, // Assuming you have a navigation property
+                OldScore = oldScore,
+                NewScore = player.Score,
+                ChangeDate = DateTime.Now
+            };
+
+            // Add the score history entry to the context
+            _context.ScoreHistories.Add(scoreHistory);
+
             // Save changes to the database
             _context.Update(player);
             await _context.SaveChangesAsync();
+
+            // Clean up the ScoreHistory if necessary
+            _context.CleanUpScoreHistory(30); 
 
             return RedirectToAction(nameof(Index));
         }

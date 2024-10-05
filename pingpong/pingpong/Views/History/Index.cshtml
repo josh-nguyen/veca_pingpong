@@ -1,0 +1,27 @@
+@model IEnumerable<pingpong.Models.ScoreHistory>
+
+<h1 class="text-center my-4">History</h1>
+
+<div class="container">
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>Player</th>
+            <th>Old Score</th>
+            <th>New Score</th>
+            <th>Change Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.Player.Name</td>
+                <td>@record.OldScore</td>
+                <td>@record.NewScore</td>
+                <td>@record.ChangeDate.ToString("g")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
