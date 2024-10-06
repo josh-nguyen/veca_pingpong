@@ -27,6 +27,7 @@
                 <th scope="col">Rank</th>
                 <th scope="col">@Html.DisplayNameFor(model => model.First().Name)</th>
                 <th scope="col">@Html.DisplayNameFor(model => model.First().Score)</th>
+                <th scope="col">Form</th>
             </tr>
         </thead>
         <tbody>
@@ -50,6 +51,11 @@
                 <td>
                     <div style="background-color:@color; color:@textColor; border-radius: 15px; padding: 10px 15px; display: inline-block; margin: 5px;">
                         @Html.DisplayFor(modelItem => item.player.Score)
+                    </div>
+                </td>
+                <td>
+                    <div style="background-color:@color; color:@textColor; border-radius: 15px; padding: 10px 15px; display: inline-block; margin: 5px;">
+                        @Html.DisplayFor(modelItem => item.player.Form)
                     </div>
                 </td>
             </tr>
